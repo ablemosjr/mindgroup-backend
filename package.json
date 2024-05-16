@@ -4,6 +4,7 @@
   "description": "API para um Sistema de Estoque, case Mind Group.",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -19,6 +20,7 @@
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.12.12",
+    "nodemon": "^3.1.0",
     "typescript": "^5.4.5"
   }
 }
