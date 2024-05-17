@@ -10,5 +10,6 @@ router.post('/login', UserController.login);
 router.post('/products', ProductController.create);
 router.get('/products', ProductController.getAll);
 router.get('/products/:id', ProductController.getById);
+router.put('/products/:id', ProductController.update);
 
 export default router;

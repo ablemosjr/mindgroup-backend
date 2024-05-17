@@ -50,6 +50,28 @@ export default {
     } catch (error) {
       return res.status(500).json({ error: 'Erro ao buscar produto' });
     }
+  },
 
+  async update(req: Request, res: Response) {
+    const { id } = req.params;
+    const { name, description, image, price, quantity, userId } = req.body;
+
+    try {
+      const product = await prisma.product.update({
+        where: { id: Number(id) },
+        data: {
+          name, 
+          description, 
+          image, 
+          price, 
+          quantity, 
+          userId
+        }
+      });
+
+      return res.status(200).json(product);
+    } catch (error) {
+      return res.status(400).json({ error: 'Erro ao atualizar produto.' });
+    }
   }
 }
