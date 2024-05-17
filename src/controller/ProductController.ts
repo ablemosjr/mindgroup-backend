@@ -52,7 +52,7 @@ export default {
     }
   },
 
-  async update(req: Request, res: Response) {
+  async update(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
     const { name, description, image, price, quantity, userId } = req.body;
 
@@ -72,6 +72,20 @@ export default {
       return res.status(200).json(product);
     } catch (error) {
       return res.status(400).json({ error: 'Erro ao atualizar produto.' });
+    }
+  },
+
+  async delete(req: Request, res: Response) {
+    const { id } = req.params;
+
+    try {
+      await prisma.product.delete({
+        where: { id: Number(id) }
+      });
+
+      return res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ error: 'Erro ao deletar produto.' });
     }
   }
 }
