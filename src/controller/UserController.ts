@@ -4,8 +4,22 @@ import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
+interface CreateUserRequest extends Request {
+  body: {
+    name: string;
+    email: string;
+    password: string;
+  }
+}
+interface LoginUserRequest extends Request {
+  body: {
+    email: string;
+    password: string;
+  }
+}
+
 export default {
-  async create(req: Request, res: Response): Promise<Response> {
+  async create(req: CreateUserRequest, res: Response): Promise<Response> {
     const { name, email, password } = req.body;
 
     try {
@@ -25,7 +39,7 @@ export default {
     }
   },
 
-  async login(req: Request, res: Response): Promise<Response> {
+  async login(req: LoginUserRequest, res: Response): Promise<Response> {
     const { email, password } = req.body;
 
     try {

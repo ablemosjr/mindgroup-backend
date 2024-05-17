@@ -3,8 +3,37 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+interface CreateProductRequest extends Request {
+  body: {
+    name: string;
+    description?: string;
+    image?: Buffer;
+    price: number;
+    quantity: number;
+    userId: number;
+  }
+}
+
+interface UpdateProductRequest extends Request {
+  body: {
+    name?: string;
+    description?: string;
+    image?: Buffer;
+    price?: number;
+    quantity?: number;
+    userId?: number;
+  }
+  params: {
+    id: string;
+  }
+}
+
+interface ProductParams {
+  id: string;
+}
+
 export default {
-  async create(req: Request, res: Response): Promise<Response> {
+  async create(req: CreateProductRequest, res: Response): Promise<Response> {
     const { name, description, image, price, quantity, userId } = req.body;
 
     try {
@@ -34,7 +63,7 @@ export default {
     }
   },
 
-  async getById(req: Request, res: Response) {
+  async getById(req: Request<ProductParams>, res: Response): Promise<Response> {
     const { id } = req.params;
 
     try {
@@ -52,7 +81,7 @@ export default {
     }
   },
 
-  async update(req: Request, res: Response): Promise<Response> {
+  async update(req: UpdateProductRequest, res: Response): Promise<Response> {
     const { id } = req.params;
     const { name, description, image, price, quantity, userId } = req.body;
 
@@ -75,7 +104,7 @@ export default {
     }
   },
 
-  async delete(req: Request, res: Response) {
+  async delete(req: Request<ProductParams>, res: Response): Promise<Response> {
     const { id } = req.params;
 
     try {
@@ -85,7 +114,7 @@ export default {
 
       return res.status(204).send();
     } catch (error) {
-      res.status(500).json({ error: 'Erro ao deletar produto.' });
+      return res.status(500).json({ error: 'Erro ao deletar produto.' });
     }
   }
 }
