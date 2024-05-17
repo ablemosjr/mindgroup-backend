@@ -23,5 +23,14 @@ export default {
     } catch (error) {
       return res.status(400).json({ error: 'Erro ao criar produto.' });
     }
+  },
+
+  async getAll(req: Request, res: Response): Promise<Response> {
+    try {
+      const products = await prisma.product.findMany();
+      return res.status(200).json(products);
+    } catch (error) {
+      return res.status(500).json({ error: 'Erro ao buscar lista de produtos.' });
+    }
   }
 }

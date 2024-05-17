@@ -8,5 +8,6 @@ router.post('/users', UserController.create);
 router.post('/login', UserController.login);
 
 router.post('/products', ProductController.create);
+router.get('/products', ProductController.getAll);
 
 export default router;
