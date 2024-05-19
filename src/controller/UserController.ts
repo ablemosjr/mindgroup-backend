@@ -55,7 +55,14 @@ export default {
         return res.status(400).json({ error: 'Senha inválida.' });
       }
   
-      return res.json({ message: 'Login feito com sucesso.' });
+      return res.json({ 
+        message: 'Login feito com sucesso.',
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email
+        } 
+      });
     } catch (error) {
       return res.status(500).json({ error: 'Erro ao fazer login.' });
     }
