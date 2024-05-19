@@ -7,7 +7,7 @@ interface CreateProductRequest extends Request {
   body: {
     name: string;
     description?: string;
-    image?: Buffer;
+    image?: string;
     price: number;
     quantity: number;
     userId: number;
@@ -18,7 +18,7 @@ interface UpdateProductRequest extends Request {
   body: {
     name?: string;
     description?: string;
-    image?: Buffer;
+    image?: string;
     price?: number;
     quantity?: number;
     userId?: number;
@@ -36,7 +36,7 @@ export default {
   async create(req: CreateProductRequest, res: Response): Promise<Response> {
     const { name, description, image, price, quantity, userId } = req.body;
 
-    try {
+    try {   
       const product = await prisma.product.create({
         data: {
           name,

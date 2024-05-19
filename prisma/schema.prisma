@@ -19,7 +19,7 @@ model Product {
   id Int @id @default(autoincrement())
   name String @unique
   description String?
-  image Bytes?
+  image String?
   price Decimal
   quantity Int
   user User @relation(fields: [userId], references: [id])
