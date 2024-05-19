@@ -11,6 +11,7 @@ interface CreateProductRequest extends Request {
     price: number;
     quantity: number;
     userId: number;
+    prodId: number;
   }
 }
 
@@ -21,7 +22,7 @@ interface UpdateProductRequest extends Request {
     image?: string;
     price?: number;
     quantity?: number;
-    userId?: number;
+    userId: number;
   }
   params: {
     id: string;
@@ -45,6 +46,15 @@ export default {
           price,
           quantity,
           userId,
+        }
+      });
+
+      await prisma.productLog.create({
+        data: {
+          quantity: product.quantity,
+          type: 'Entrada',
+          userId: req.body.userId,
+          prodId: product.id
         }
       });
       
@@ -86,6 +96,10 @@ export default {
     const { name, description, image, price, quantity, userId } = req.body;
 
     try {
+      const previousProduct = await prisma.product.findUnique({
+        where: { id: Number(id) }
+      });
+
       const product = await prisma.product.update({
         where: { id: Number(id) },
         data: {
@@ -95,6 +109,20 @@ export default {
           price, 
           quantity, 
           userId
+        }
+      });
+
+      const updateQuantity = product.quantity || 0;
+      const previousQuantity = previousProduct?.quantity || 0;
+
+      const quantityDifference = updateQuantity - previousQuantity;
+
+      await prisma.productLog.create({
+        data: {
+          quantity: quantityDifference,
+          type: quantityDifference > 0 ? 'Entrada' : 'Saída',
+          userId: req.body.userId,
+          prodId: product.id
         }
       });
 
@@ -108,6 +136,10 @@ export default {
     const { id } = req.params;
 
     try {
+      await prisma.productLog.deleteMany({
+        where: { prodId: Number(id) }
+      });
+
       await prisma.product.delete({
         where: { id: Number(id) }
       });
